@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA & CGPA Calculator with CSV Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            min-width: 150px;
+        }
+        .form-group input:last-child {
+            margin-right: 0;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+            background-color: #007bff;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            color: #333;
+            background-color: #e9ecef;
+        }
+        .reset-button {
+            background-color: #dc3545;
+            color: white;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .reset-button:hover {
+            background-color: #c82333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #e9ecef;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .status-fail-table {
+            background-color: #f8d7da;
+        }
+        .status-pass {
+            color: green;
+            font-weight: bold;
+        }
+        .status-fail {
+            color: red;
+            font-weight: bold;
+        }
+        #branch-output {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .college-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .college-button {
+            flex: 1;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .college-button:hover {
+            background-color: #45a049;
+        }
+        .college-details {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+        .college-header {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .backlog-summary {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .college-section {
+            margin-bottom: 20px;
+        }
+        .delete-button {
+            height: 90%;
+            width: auto;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+            margin-left: 10px;
+            padding: auto;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        @media (max-width: 600px) {
+            .form-group {
+                flex-direction: column;
+            }
+            .form-group input {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>SGPA Calculator with CSV Upload</h1>
+        <div>
+            <h2>SGPA Calculator</h2>
+            <div id="sgpa-form">
+                <div class="form-group">
+                    <input type="text" id="grade" placeholder="Grade (O, A, B, C, D, E, F)" />
+                    <input type="number" id="credits" placeholder="Credits" />
+                </div>
+                <button id="add-grade">Add Grade</button>
+            </div>
+            <ul id="subject-list"></ul>
+            <button id="calculate-sgpa">Calculate SGPA</button>
+            <div id="sgpa-result" class="result"></div>
+        </div>
+        <div style="margin-top: 30px;">
+            <h2>Upload CSV for Subjects</h2>
+            <input type="file" id="csv-file" accept=".csv" />
+            <button id="upload-csv">Upload and Process CSV</button>
+
+            <div style="margin-top: 20px;">
+                <h2>Search by Hall Ticket Number</h2>
+                <div class="form-group">
+                    <input type="text" id="hallticket-input" placeholder="Enter Hall Ticket Number" />
+                    <button id="search-hallticket">Search</button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table id="subject-details-table">
+                        <thead>
+                            <tr>
+                                <th>Subject Code</th>
+                                <th>Subject Name</th>
+                                <th>Internal Marks</th>
+                                <th>Grade</th>
+                                <th>Credits</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="status-result" class="result"></div>
+            </div>
+        </div>
+
+        <section id="branch-section">
+            <h2>Filter by Branch Code</h2>
+            <div class="form-group">
+                <input type="text" id="branchInput" maxlength="2" placeholder="Enter Branch Code (e.g., 05,42,44)" />
+                <button onclick="filterByBranch()">Get Branch Backlogs</button>
+            </div>
+            <div class="college-buttons">
+                <button class="college-button" onclick="filterByCollege('P3')">P3 College</button>
+                <button class="college-button" onclick="filterByCollege('MH')">MH College</button>
+
+            </div>
+            <div id="branch-output"></div>
+        </section>
+
+        <button id="reset" class="reset-button">Reset</button>
+    </div>
+
+    <script>
+        const gradePoints = {
+            'O': 10,
+            'A': 9,
+            'B': 8,
+            'C': 7,
+            'D': 6,
+            'E': 5,
+            'F': 0
+        };
+
+        let sgpaList = [];
+        let csvData = [];
+
+        document.getElementById('add-grade').addEventListener('click', () => {
+            const grade = document.getElementById('grade').value.toUpperCase();
+            const credits = parseInt(document.getElementById('credits').value);
+
+            if (gradePoints[grade] === undefined || isNaN(credits) || credits <= 0) {
+                alert('Please enter valid grade and credits.');
+                return;
+            }
+            sgpaList.push({ grade, credits });
+            const subjectList = document.getElementById('subject-list');
+            const listItem = document.createElement('li');
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.className = 'delete-button';
+            deleteButton.addEventListener('click', () => {
+                sgpaList.splice(sgpaList.length - 1, 1);
+                subjectList.removeChild(listItem);
+            });
+            listItem.textContent = `Subject ${sgpaList.length} - Grade: ${grade}, Credits: ${credits}`;
+            subjectList.appendChild(listItem);
+            listItem.appendChild(deleteButton);
+            document.getElementById('grade').value = '';
+            document.getElementById('credits').value = '';
+        });
+
+        document.getElementById('calculate-sgpa').addEventListener('click', () => {
+            if (sgpaList.length === 0) {
+                alert('Please add at least one subject.');
+                return;
+            }
+
+            let totalGradePoints = 0, totalCredits = 0;
+            sgpaList.forEach(subject => {
+                totalGradePoints += gradePoints[subject.grade] * subject.credits;
+                totalCredits += subject.credits;
+            });
+
+            const sgpa = totalGradePoints / totalCredits;
+            document.getElementById('sgpa-result').textContent = `SGPA: ${sgpa.toFixed(2)}`;
+        });
+
+        document.getElementById('upload-csv').addEventListener('click', () => {
+            const fileInput = document.getElementById('csv-file');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a CSV file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const content = e.target.result;
+                csvData = processCSV(content);
+                alert('File Uploaded Successfully');
+            };
+            reader.readAsText(file);
+        });
+
+        function processCSV(data) {
+            const rows = data.split('\n').map(row => row.split(','));
+            return rows.slice(1).map(row => {
+                if (row.length >= 7) {
+                    return {
+                        sno: row[0].trim(),
+                        hallticket: row[1].trim(),
+                        subjectCode: row[2].trim(),
+                        subjectName: row[3].trim(),
+                        internalMarks: row[4].trim(),
+                        grade: row[5].trim(),
+                        credits: row[6].trim()
+                    };
+                }
+                return null;
+            }).filter(Boolean);
+        }
+
+        document.getElementById('search-hallticket').addEventListener('click', () => {
+            const hallticketNumber = document.getElementById('hallticket-input').value.trim();
+            if (!hallticketNumber) {
+                alert('Please enter a Hall Ticket number.');
+                return;
+            }
+
+            const subjects = csvData.filter(row => row.hallticket === hallticketNumber);
+            const tableBody = document.querySelector('#subject-details-table tbody');
+            tableBody.innerHTML = '';
+
+            if (subjects.length === 0) {
+                alert('No data found for this Hall Ticket number.');
+                return;
+            }
+
+            let allPassed = true;
+
+            subjects.forEach(subject => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${subject.subjectCode}</td>
+                    <td>${subject.subjectName}</td>
+                    <td>${subject.internalMarks}</td>
+                    <td>${subject.grade}</td>
+                    <td>${subject.credits}</td>
+                `;
+
+                if (subject.grade === 'F') {
+                    row.classList.add('status-fail-table');
+                    allPassed = false;
+                }
+                tableBody.appendChild(row);
+            });
+
+            const statusResult = document.getElementById('status-result');
+            if (allPassed) {
+                statusResult.textContent = 'Status: Pass 🎉';
+                statusResult.classList.add('status-pass');
+                statusResult.classList.remove('status-fail');
+            } else {
+                statusResult.textContent = 'Status: Fail 😞';
+                statusResult.classList.add('status-fail');
+                statusResult.classList.remove('status-pass');
+            }
+        });
+
+        function filterByBranch() {
+            const branchCode = document.getElementById('branchInput').value.trim().toUpperCase();
+            const branchOutputDiv = document.getElementById('branch-output');
+
+            if (!branchCode || branchCode.length !== 2) {
+                branchOutputDiv.textContent = 'Please enter a valid 2-character branch code.';
+                return;
+            }
+
+            if (csvData.length === 0) {
+                branchOutputDiv.textContent = 'Please upload and process a CSV file first.';
+                return;
+            }
+
+
+            const branchStudents = [...new Set(csvData
+                .filter(row => row.hallticket.slice(6, 8) === branchCode)
+                .map(row => row.hallticket))];
+
+            if (branchStudents.length === 0) {
+                branchOutputDiv.textContent = `No students found for branch code: ${branchCode}`;
+                return;
+            }
+
+            let resultHTML = '<h3>Branch Backlog Details:</h3><ul>';
+            let backlogCount = 0;
+
+            branchStudents.forEach(hallTicket => {
+                const studentSubjects = csvData.filter(row => row.hallticket === hallTicket);
+                const backlogSubjects = studentSubjects
+                    .filter(subject => subject.grade === 'F' )
+                    .map(subject => subject.subjectName);
+
+                if (backlogSubjects.length > 0) {
+                    backlogCount++;
+                    resultHTML += `<li>${hallTicket} - Backlogs: ${backlogSubjects.join(', ')}</li>`;
+                } else {
+                    resultHTML += `<li>${hallTicket} - No Backlogs</li>`;
+                }
+            });
+
+            resultHTML += `</ul><p><strong>Total Students with Backlogs: ${backlogCount}</strong></p>`;
+            branchOutputDiv.innerHTML = resultHTML;
+        }
+
+        function filterByCollege(collegeCode) {
+            const branchCode = document.getElementById('branchInput').value.trim().toUpperCase();
+            const branchOutputDiv = document.getElementById('branch-output');
+
+            if (!branchCode || branchCode.length !== 2) {
+                branchOutputDiv.textContent = 'Please enter a valid 2-character branch code.';
+                return;
+            }
+
+            if (csvData.length === 0) {
+                branchOutputDiv.textContent = 'Please upload and process a CSV file first.';
+                return;
+            }
+
+            let resultHTML = '';
+
+            if (collegeCode === 'ALL') {
+
+                resultHTML = generateCollegeReport('P3', branchCode) +
+                    generateCollegeReport('MH', branchCode) +
+                    generateCombinedSummary(branchCode);
+            } else {
+
+                resultHTML = generateCollegeReport(collegeCode, branchCode);
+            }
+
+            branchOutputDiv.innerHTML = resultHTML;
+        }
+
+        function generateCollegeReport(collegeCode, branchCode) {
+
+            const collegeStudents = [...new Set(csvData
+                .filter(row => {
+                    const studentCollege = row.hallticket.slice(2, 4);
+                    return studentCollege === collegeCode &&
+                        row.hallticket.slice(6, 8) === branchCode;
+                })
+                .map(row => row.hallticket))];
+
+            if (collegeStudents.length === 0) {
+                return `
+                    <div class="college-section">
+                        <div class="college-header">${collegeCode} College - ${branchCode} Branch</div>
+                        <p>No students found for this combination.</p>
+                    </div>`;
+            }
+
+            let backlogCount = 0;
+            let detailsHTML = '<ul>';
+
+            collegeStudents.forEach(hallTicket => {
+                const studentSubjects = csvData.filter(row => row.hallticket === hallTicket);
+                const backlogSubjects = studentSubjects
+                    .filter(subject => subject.grade === 'F')
+                    .map(subject => subject.subjectName);
+
+                if (backlogSubjects.length > 0) {
+                    backlogCount++;
+                    detailsHTML += `<li>${hallTicket} - Backlogs: ${backlogSubjects.join(', ')}</li>`;
+                } else {
+                    detailsHTML += `<li>${hallTicket} - No Backlogs</li>`;
+                }
+            });
+            detailsHTML += '</ul>';
+
+            return `
+                <div class="college-section">
+                    <div class="college-header">${collegeCode} College - ${branchCode} Branch</div>
+                    <div class="backlog-summary">
+                        <p><strong>Total Students: ${collegeStudents.length}</strong></p>
+                        <p><strong>Students with Backlogs: ${backlogCount}</strong></p>
+                        <p><strong>Pass Percentage: ${((collegeStudents.length - backlogCount) / collegeStudents.length * 100).toFixed(2)}%</strong></p>
+                    </div>
+                    ${detailsHTML}
+                </div>`;
+        }
+
+        function generateCombinedSummary(branchCode) {
+            const totalStudents = [...new Set(csvData
+                .filter(row => row.hallticket.slice(6, 8) === branchCode)
+                .map(row => row.hallticket))];
+
+            const studentsWithBacklogs = new Set();
+            totalStudents.forEach(hallTicket => {
+                const hasBacklog = csvData
+                    .filter(row => row.hallticket === hallTicket)
+                    .some(subject => subject.grade === 'F');
+                if (hasBacklog) {
+                    studentsWithBacklogs.add(hallTicket);
+                }
+            });
+
+            return `
+                <div class="college-section">
+                    <div class="college-header">Combined Summary - ${branchCode} Branch</div>
+                    <div class="backlog-summary">
+                        <p><strong>Total Students Across Both Colleges: ${totalStudents.length}</strong></p>
+                        <p><strong>Total Students with Backlogs: ${studentsWithBacklogs.size}</strong></p>
+                        <p><strong>Overall Pass Percentage: ${((totalStudents.length - studentsWithBacklogs.size) / totalStudents.length * 100).toFixed(2)}%</strong></p>
+                    </div>
+                </div>`;
+        }
+
+        document.getElementById('hallticket-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                document.getElementById('search-hallticket').click();
+            }
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            document.getElementById('grade').value = '';
+            document.getElementById('credits').value = '';
+            document.getElementById('subject-list').innerHTML = '';
+            document.getElementById('sgpa-result').textContent = '';
+            document.getElementById('hallticket-input').value = '';
+            document.getElementById('branchInput').value = '';
+            document.querySelector('#subject-details-table tbody').innerHTML = '';
+            document.getElementById('status-result').textContent = '';
+            document.getElementById('branch-output').innerHTML = '';
+            sgpaList = [];
+            csvData = [];
+            document.getElementById('csv-file').value = '';
+        });
+    </script>
+</body>
+
+</html>
