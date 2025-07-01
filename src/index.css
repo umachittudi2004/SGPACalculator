@@ -1,0 +1,335 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #007bff;
+  padding: 0 20px;
+  height: 60px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+}
+.navbar-title {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+.navbar-tabs {
+  display: flex;
+  gap: 10px;
+}
+.navbar-tabs button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  transition: background 0.2s;
+}
+.navbar-tabs button.active,
+.navbar-tabs button:hover {
+  background: #0056b3;
+}
+.reset-navbar-btn {
+  background-color: #dc3545 !important;
+  color: white !important;
+  border-radius: 4px !important;
+  margin-left: 20px;
+  padding: 10px 16px;
+}
+.tab-content {
+  max-width: 800px;
+  margin: 32px auto 0 auto;
+  padding: 24px 20px 40px 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+h1 {
+  text-align: center;
+  color: #333;
+}
+h2 {
+  color: #555;
+  margin-bottom: 10px;
+}
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+.form-group input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  min-width: 150px;
+}
+.form-group input:last-child {
+  margin-right: 0;
+}
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+  background-color: #007bff;
+  color: white;
+}
+button:hover {
+  background-color: #0056b3;
+}
+.result {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 1.2em;
+  color: #333;
+  background-color: #e9ecef;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  background: #e9ecef;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+table,
+th,
+td {
+  border: 1px solid #ddd;
+}
+th,
+td {
+  padding: 10px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+.status-fail-table {
+  background-color: #f8d7da;
+}
+.status-pass {
+  color: green;
+  font-weight: bold;
+}
+.status-fail {
+  color: red;
+  font-weight: bold;
+}
+#branch-output {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+.college-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+.college-button {
+  flex: 1;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.college-button:hover {
+  background-color: #45a049;
+}
+.college-details {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+.college-header {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #dee2e6;
+}
+.student-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top: 20px;
+}
+
+.student-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.student-card-header img {
+  width: 100px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 15px;
+}
+.csv-upload-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.csv-upload-card h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.csv-upload-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.custom-file-upload {
+  background-color: #6c757d;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.custom-file-upload:hover {
+  background-color: #5a6268;
+}
+
+.student-info h3 {
+  margin: 0;
+}
+
+.status-badge {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.status-pass {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-fail {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.subject-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.subject-card {
+  flex: 1 1 200px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  background: #f8f9fa;
+}
+
+.subject-card.subject-fail {
+  background: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.backlog-summary {
+  background-color: #e9ecef;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+.college-section {
+  margin-bottom: 20px;
+}
+.delete-button {
+  height: 90%;
+  width: auto;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+  margin-left: 10px;
+  padding: auto;
+}
+.delete-button:hover {
+  background-color: #c82333;
+}
+@media (max-width: 900px) {
+  .tab-content {
+    padding: 12px 2vw;
+  }
+}
+@media (max-width: 600px) {
+  .form-group {
+    flex-direction: column;
+  }
+  .form-group input {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  button {
+    width: 100%;
+  }
+  .navbar-tabs {
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 0;
+  }
+  .navbar-title {
+    padding: 10px 0;
+    text-align: center;
+  }
+}
